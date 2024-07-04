@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Assuming you use axios for HTTP requests
+import { useUser } from './UserContext';
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const { setUserId } = useUser(); // Destructure setUserId from useUser
     const [formData, setFormData] = useState({
         username: '',
         passwordhash: '',
@@ -12,18 +14,29 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Make an API request to authenticate user
-            const response = await axios.post('http://localhost:5145/api/CaseStudy/Login', formData);
+            const response = await axios.post('http://localhost:5145/api/CaseStudy/Login', {
+                username: formData.username,
+                passwordhash: formData.passwordhash
+            });
             console.log('Login successful!', response.data);
-
-            // Redirect to main page upon successful login
-            navigate('/mainpage');
-
+    
+            const { userId } = response.data;
+            if (userId) {
+                // Handle successful login, set userId in context and localStorage
+                setUserId(userId);
+                localStorage.setItem('userId', userId);
+                navigate('/mainpage');
+            } else {
+                console.error('UserID is undefined or null in response.', response.data);
+                // Handle case where userId is not received as expected
+            }
         } catch (error) {
             console.error('Login failed!', error);
             // Handle login failure (show error message, etc.)
         }
     };
+    
+    
 
     const handleChange = (e) => {
         setFormData({
