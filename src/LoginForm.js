@@ -17,7 +17,7 @@ const LoginForm = () => {
             console.log('Login successful!', response.data);
 
             // Redirect to main page upon successful login
-            navigate('/');
+            navigate('/mainpage');
 
         } catch (error) {
             console.error('Login failed!', error);
