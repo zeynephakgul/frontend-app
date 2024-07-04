@@ -13,7 +13,7 @@ const MainPage = () => {
                 <button style={{ margin: '10px' }}>Profile</button>
             </Link>
 
-            <Link to="/addtransaction">
+            <Link to="/transactions">
                 <button style={{ margin: '10px' }}>Manage Transactions</button>
             </Link>
 

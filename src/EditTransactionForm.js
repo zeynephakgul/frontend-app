@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const AddTransactionForm = () => {
+const EditTransactionForm = () => {
+    const { transactionId } = useParams();
     const [transaction, setTransaction] = useState({
-        userId: '', // Initialize userId state
+        transactionId: transactionId,
         amount: '',
         description: '',
         category: ''
@@ -13,15 +14,21 @@ const AddTransactionForm = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
-        if (storedUserId) {
-            setTransaction(prevState => ({ ...prevState, userId: storedUserId }));
-        }
+        axios.get(`http://localhost:5145/api/CaseStudy/GetUserTransactions?userId=${localStorage.getItem('userId')}`)
+            .then(response => {
+                const txn = response.data.find(t => t.TransactionId === parseInt(transactionId));
+                if (txn) {
+                    setTransaction(txn);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching transaction:', error);
+            });
 
         // Fetch categories (this could be from an API or a predefined list)
         const predefinedCategories = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Others'];
         setCategories(predefinedCategories);
-    }, []);
+    }, [transactionId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,18 +38,11 @@ const AddTransactionForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5145/api/CaseStudy/AddTransaction', transaction);
-            console.log(response.data);
-            alert('Transaction added successfully');
-            setTransaction({
-                userId: localStorage.getItem('userId') || '',
-                amount: '',
-                description: '',
-                category: ''
-            });
-            navigate('/transactions'); 
+            await axios.put('http://localhost:5145/api/CaseStudy/UpdateTransaction', transaction);
+            alert('Transaction updated successfully');
+            navigate('/transactions');
         } catch (error) {
-            alert('Failed to add transaction');
+            alert('Failed to update transaction');
             console.error(error);
         }
     };
@@ -50,19 +50,8 @@ const AddTransactionForm = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-                <h2>Add New Transaction</h2>
+                <h2>Edit Transaction</h2>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <label>User ID:</label>
-                    <input
-                        type="text"
-                        name="userId"
-                        value={transaction.userId}
-                        onChange={handleChange}
-                        disabled // Disable user input for userId
-                        required
-                        style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
-                    />
-
                     <label>Amount:</label>
                     <input
                         type="number"
@@ -96,11 +85,11 @@ const AddTransactionForm = () => {
                         ))}
                     </select>
 
-                    <button type="submit" style={{ padding: '10px 20px', marginTop: '10px' }}>Add Transaction</button>
+                    <button type="submit" style={{ padding: '10px 20px', marginTop: '10px' }}>Update Transaction</button>
                 </form>
             </div>
         </div>
     );
 };
 
-export default AddTransactionForm;
+export default EditTransactionForm;
