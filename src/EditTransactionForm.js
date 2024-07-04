@@ -47,6 +47,10 @@ const EditTransactionForm = () => {
         }
     };
 
+    const handleCancel = () => {
+        navigate('/transactions');
+    };
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
@@ -86,6 +90,7 @@ const EditTransactionForm = () => {
                     </select>
 
                     <button type="submit" style={{ padding: '10px 20px', marginTop: '10px' }}>Update Transaction</button>
+                    <button type="button" onClick={handleCancel} style={{ padding: '10px 20px', marginTop: '10px', marginLeft: '10px' }}>Cancel</button>
                 </form>
             </div>
         </div>

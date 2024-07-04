@@ -40,11 +40,15 @@ const AddTransactionForm = () => {
                 description: '',
                 category: ''
             });
-            navigate('/transactions'); 
+            navigate('/transactions');
         } catch (error) {
             alert('Failed to add transaction');
             console.error(error);
         }
+    };
+
+    const handleCancel = () => {
+        navigate('/transactions');
     };
 
     return (
@@ -97,6 +101,7 @@ const AddTransactionForm = () => {
                     </select>
 
                     <button type="submit" style={{ padding: '10px 20px', marginTop: '10px' }}>Add Transaction</button>
+                    <button type="button" onClick={handleCancel} style={{ padding: '10px 20px', marginTop: '10px' }}>Cancel</button>
                 </form>
             </div>
         </div>

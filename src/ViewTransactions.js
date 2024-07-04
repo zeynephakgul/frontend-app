@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
+
 
 const ViewTransactions = () => {
     const [transactions, setTransactions] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const navigate = useNavigate();
     
     const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
@@ -43,14 +47,42 @@ const ViewTransactions = () => {
         setSelectedCategory(e.target.value);
     };
 
-    const filteredTransactions = selectedCategory
-        ? transactions.filter(transaction => transaction.Category === selectedCategory)
-        : transactions;
+    const handleStartDateChange = (e) => {
+        setStartDate(e.target.value);
+    };
+
+    const handleEndDateChange = (e) => {
+        setEndDate(e.target.value);
+    };
+
+    const filterTransactions = () => {
+        let filteredTransactions = transactions;
+
+        // Filter by category
+        if (selectedCategory) {
+            filteredTransactions = filteredTransactions.filter(transaction => transaction.Category === selectedCategory);
+        }
+
+        // Filter by date range
+        if (startDate && endDate) {
+            filteredTransactions = filteredTransactions.filter(transaction => {
+                const transactionDate = new Date(transaction.TransactionDate);
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                return transactionDate >= start && transactionDate <= end;
+            });
+        }
+
+        return filteredTransactions;
+    };
+
+    const filteredTransactions = filterTransactions();
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100vh' }}>
             <div>
-                <h2>User Transactions</h2>
+                <Navbar />
+                <h2>Your Transaction History</h2>
                 <div style={{ marginBottom: '10px' }}>
                     <label htmlFor="categorySelect">Filter by Category:</label>
                     <select
@@ -64,6 +96,24 @@ const ViewTransactions = () => {
                             <option key={category} value={category}>{category}</option>
                         ))}
                     </select>
+                </div>
+                <div style={{ marginBottom: '10px' }}>
+                    <label htmlFor="startDate">Start Date:</label>
+                    <input
+                        type="date"
+                        id="startDate"
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        style={{ marginLeft: '10px', padding: '5px' }}
+                    />
+                    <label htmlFor="endDate" style={{ marginLeft: '10px' }}>End Date:</label>
+                    <input
+                        type="date"
+                        id="endDate"
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        style={{ marginLeft: '10px', padding: '5px' }}
+                    />
                 </div>
                 <table style={{ borderCollapse: 'collapse', width: '100%' }}>
                     <thead>
