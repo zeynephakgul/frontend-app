@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const handleLogout = () => {
-        // Clear session data, e.g., localStorage.clear();
-        // Redirect to login page
-        window.location.href = '/'; // This will reload the page and redirect to /login
+        window.location.href = '/';
     };
 
     return (

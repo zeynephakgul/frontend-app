@@ -47,7 +47,7 @@ const TransferForm = () => {
                 description: ''
             });
 
-            navigate('/transfers'); // Redirect to the transfers page
+            navigate('/transfers');
 
         } catch (error) {
             console.error('Error during transfer:', error);

@@ -10,7 +10,7 @@ const EditTransactionForm = () => {
         description: '',
         category: ''
     });
-    const [categories, setCategories] = useState([]); // Add categories state
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,7 +25,6 @@ const EditTransactionForm = () => {
                 console.error('Error fetching transaction:', error);
             });
 
-        // Fetch categories (this could be from an API or a predefined list)
         const predefinedCategories = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Others'];
         setCategories(predefinedCategories);
     }, [transactionId]);

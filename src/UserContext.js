@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-    const [userId, setUserId] = useState(localStorage.getItem('userId') || null); // Initialize userId state from localStorage
+    const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
 
     return (
         <UserContext.Provider value={{ userId, setUserId }}>

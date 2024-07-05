@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddTransactionForm = () => {
     const [transaction, setTransaction] = useState({
-        userId: '', // Initialize userId state
+        userId: '',
         amount: '',
         description: '',
         category: ''
@@ -18,7 +18,6 @@ const AddTransactionForm = () => {
             setTransaction(prevState => ({ ...prevState, userId: storedUserId }));
         }
 
-        // Fetch categories (this could be from an API or a predefined list)
         const predefinedCategories = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Others'];
         setCategories(predefinedCategories);
     }, []);

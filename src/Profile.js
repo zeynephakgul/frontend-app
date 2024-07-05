@@ -11,7 +11,7 @@ const ProfilePage = () => {
     });
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
-    const [originalUser, setOriginalUser] = useState(null); // Store original user data for cancel
+    const [originalUser, setOriginalUser] = useState(null);
 
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const ProfilePage = () => {
                     fullName: response.data.FullName,
                     userId: response.data.UserId
                 });
-                setOriginalUser(response.data); // Store original user data
+                setOriginalUser(response.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             } finally {
@@ -46,7 +46,7 @@ const ProfilePage = () => {
 
     const handleSave = async () => {
         try {
-            const { userId, fullName, email } = user; // Destructure user object
+            const { userId, fullName, email } = user;
             const url = `http://localhost:5145/api/CaseStudy/UpdateUser?userId=${userId}&fullName=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}`;
             
             const response = await axios.put(url);
@@ -58,7 +58,6 @@ const ProfilePage = () => {
     };
 
     const handleCancel = () => {
-        // Restore original user data
         setUser({
             email: originalUser.Email,
             fullName: originalUser.FullName,
@@ -69,13 +68,12 @@ const ProfilePage = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            const userId = user.userId; // Assuming userId is stored in user state
+            const userId = user.userId;
             const url = `http://localhost:5145/api/CaseStudy/DeleteUser?userId=${userId}`;
             
             const response = await axios.delete(url);
             console.log('User deleted:', response.data);
             navigate('/');
-            // Optionally handle user feedback or redirect to a different page
         } catch (error) {
             console.error('Error deleting user:', error);
         }

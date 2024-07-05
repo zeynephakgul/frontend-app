@@ -11,7 +11,7 @@ const MainPage = () => {
             const userId = localStorage.getItem('userId');
             try {
                 const response = await axios.get(`http://localhost:5145/api/CaseStudy/GetUserNameById?userId=${userId}`);
-                setFullName(response.data); // Assuming backend returns full name as a string
+                setFullName(response.data);
             } catch (error) {
                 console.error('Error fetching full name:', error);
             }
@@ -21,7 +21,7 @@ const MainPage = () => {
             const appId = 'c89498c069484bd38de487533bd285c9';
             try {
                 const response = await axios.get(`https://openexchangerates.org/api/latest.json?app_id=${appId}`);
-                setExchangeRates(response.data.rates); // Assuming response.data contains rates
+                setExchangeRates(response.data.rates);
             } catch (error) {
                 console.error('Error fetching exchange rates:', error);
             }

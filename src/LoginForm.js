@@ -5,7 +5,7 @@ import { useUser } from './UserContext';
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const { setUserId } = useUser(); // Destructure setUserId from useUser
+    const { setUserId } = useUser();
     const [formData, setFormData] = useState({
         username: '',
         passwordhash: '',
@@ -22,17 +22,15 @@ const LoginForm = () => {
     
             const { userId } = response.data;
             if (userId) {
-                // Handle successful login, set userId in context and localStorage
+                // Handle successful login, set userId
                 setUserId(userId);
                 localStorage.setItem('userId', userId);
                 navigate('/mainpage');
             } else {
                 console.error('UserID is undefined or null in response.', response.data);
-                // Handle case where userId is not received as expected
             }
         } catch (error) {
             console.error('Login failed!', error);
-            // Handle login failure (show error message, etc.)
         }
     };
 
