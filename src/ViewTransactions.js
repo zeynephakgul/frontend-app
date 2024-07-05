@@ -118,7 +118,7 @@ const ViewTransactions = () => {
                 <table style={{ borderCollapse: 'collapse', width: '100%' }}>
                     <thead>
                         <tr>
-                            <th style={{ border: '1px solid black', padding: '8px' }}>Transaction ID</th>
+
                             <th style={{ border: '1px solid black', padding: '8px' }}>Amount</th>
                             <th style={{ border: '1px solid black', padding: '8px' }}>Description</th>
                             <th style={{ border: '1px solid black', padding: '8px' }}>Category</th>
@@ -129,7 +129,7 @@ const ViewTransactions = () => {
                     <tbody>
                         {filteredTransactions.map(transaction => (
                             <tr key={transaction.TransactionId}>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{transaction.TransactionId}</td>
+
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{transaction.Amount}</td>
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{transaction.Description}</td>
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{transaction.Category}</td>

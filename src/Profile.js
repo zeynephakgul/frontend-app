@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
     const [user, setUser] = useState({
@@ -11,6 +12,8 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [originalUser, setOriginalUser] = useState(null); // Store original user data for cancel
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -71,6 +74,7 @@ const ProfilePage = () => {
             
             const response = await axios.delete(url);
             console.log('User deleted:', response.data);
+            navigate('/');
             // Optionally handle user feedback or redirect to a different page
         } catch (error) {
             console.error('Error deleting user:', error);

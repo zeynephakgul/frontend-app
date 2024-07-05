@@ -56,16 +56,7 @@ const AddTransactionForm = () => {
             <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
                 <h2>Add New Transaction</h2>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <label>User ID:</label>
-                    <input
-                        type="text"
-                        name="userId"
-                        value={transaction.userId}
-                        onChange={handleChange}
-                        disabled // Disable user input for userId
-                        required
-                        style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
-                    />
+
 
                     <label>Amount:</label>
                     <input
