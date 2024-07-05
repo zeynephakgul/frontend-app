@@ -2,6 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+    const handleLogout = () => {
+        // Clear session data, e.g., localStorage.clear();
+        // Redirect to login page
+        window.location.href = '/'; // This will reload the page and redirect to /login
+    };
+
     return (
         <nav style={{ backgroundColor: '#333', color: '#fff', padding: '10px', marginBottom: '20px', borderRadius: '8px' }}>
             <ul style={{ display: 'flex', justifyContent: 'space-around', listStyleType: 'none', margin: 0, padding: 0 }}>
@@ -16,6 +22,9 @@ const Navbar = () => {
                 </li>
                 <li>
                     <Link to="/profile" style={{ color: '#fff', textDecoration: 'none' }}>Profile</Link>
+                </li>
+                <li>
+                    <button onClick={handleLogout} style={{ backgroundColor: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>Logout</button>
                 </li>
             </ul>
         </nav>

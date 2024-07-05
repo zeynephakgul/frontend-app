@@ -1,109 +1,83 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';
 
-const TransferForm = () => {
+const LoginForm = () => {
+    const navigate = useNavigate();
+    const { setUserId } = useUser(); // Destructure setUserId from useUser
     const [formData, setFormData] = useState({
         username: '',
-        amount: '',
-        description: ''
+        passwordhash: '',
     });
-
-    const [transferStatus, setTransferStatus] = useState('');
-    const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const [loginStatus, setLoginStatus] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await axios.get(`http://localhost:5145/api/CaseStudy/GetUserIdByUsername?username=${formData.username}`);
-            const recipientId = response.data;
-
-            if (!recipientId) {
-                setTransferStatus('Recipient username not found.');
-                alert('Recipient username not found.');
-                return;
-            }
-
-            const transferData = {
-                senderUserId: localStorage.getItem('userId'),
-                receiverUserId: recipientId,
-                amount: formData.amount,
-                description: formData.description
-            };
-
-            const transferResponse = await axios.post('http://localhost:5145/api/CaseStudy/AddTransfer', transferData);
-            setTransferStatus('Transfer successful!');
-            alert('Transfer successful!');
-            setFormData({
-                username: '',
-                amount: '',
-                description: ''
+            const response = await axios.post('http://localhost:5145/api/CaseStudy/Login', {
+                username: formData.username,
+                passwordhash: formData.passwordhash
             });
-
-            navigate('/transfers'); // Redirect to the transfers page
-
+            console.log('Login successful!', response.data);
+    
+            const { userId } = response.data;
+            if (userId) {
+                // Handle successful login, set userId in context and localStorage
+                setUserId(userId);
+                localStorage.setItem('userId', userId);
+                navigate('/mainpage');
+            } else {
+                console.error('UserID is undefined or null in response.', response.data);
+                setLoginStatus('Login failed. Please check your credentials.');
+            }
         } catch (error) {
-            console.error('Error during transfer:', error);
-            setTransferStatus('Failed to transfer funds.');
-            alert('Failed to transfer funds.');
+            console.error('Login failed!', error);
+            setLoginStatus('Login failed. Please check your credentials.');
         }
     };
 
-    const handleCancel = () => {
-        navigate('/transfers');
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', maxWidth: '500px', width: '100%', backgroundColor: '#ffffff' }}>
-                <Navbar />
-                <h2 style={{ textAlign: 'center' }}>Transfer Funds</h2>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <label style={{ width: '100%', textAlign: 'left' }}>Recipient Username:</label>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+            <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', maxWidth: '400px', width: '100%', backgroundColor: '#ffffff' }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Login</h2>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '10px' }}>Username:</label>
                     <input
                         type="text"
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
                         required
-                        style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
+                        style={{ padding: '10px', marginBottom: '20px', borderRadius: '4px', border: '1px solid #ccc' }}
                     />
                     
-                    <label style={{ width: '100%', textAlign: 'left' }}>Amount:</label>
+                    <label style={{ marginBottom: '10px' }}>Password:</label>
                     <input
-                        type="number"
-                        name="amount"
-                        value={formData.amount}
+                        type="password"
+                        name="passwordhash"
+                        value={formData.passwordhash}
                         onChange={handleChange}
                         required
-                        style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
+                        style={{ padding: '10px', marginBottom: '20px', borderRadius: '4px', border: '1px solid #ccc' }}
                     />
                     
-                    <label style={{ width: '100%', textAlign: 'left' }}>Description:</label>
-                    <input
-                        type="text"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                        style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
-                    />
-                    
-                    <button type="submit" style={{ padding: '10px 20px', marginTop: '10px' }}>Transfer</button>
-                    {transferStatus && <p style={{ textAlign: 'center', marginTop: '15px' }}>{transferStatus}</p>}
-
-                    <button type="button" onClick={handleCancel} style={{ padding: '10px 20px', marginTop: '10px' }}>Cancel</button>
+                    <button type="submit" style={{ padding: '10px 20px', marginTop: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Login</button>
+                    {loginStatus && <p style={{ textAlign: 'center', marginTop: '10px', color: 'red' }}>{loginStatus}</p>}
                 </form>
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    <p>Don't have an account? <a href="/register" style={{ color: '#007bff', textDecoration: 'none' }}>Create One</a></p>
+                </div>
             </div>
         </div>
     );
 };
 
-export default TransferForm;
+export default LoginForm;

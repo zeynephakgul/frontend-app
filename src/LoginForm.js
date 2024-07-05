@@ -35,8 +35,6 @@ const LoginForm = () => {
             // Handle login failure (show error message, etc.)
         }
     };
-    
-    
 
     const handleChange = (e) => {
         setFormData({
@@ -46,19 +44,24 @@ const LoginForm = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username:</label>
-                    <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+            <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', width: '300px' }}>
+                <h2 style={{ textAlign: 'center' }}>Login</h2>
+                <form onSubmit={handleSubmit}>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>Username:</label>
+                        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>Password:</label>
+                        <input type="password" name="passwordhash" value={formData.passwordhash} onChange={handleChange} />
+                    </div>
+                    <button type="submit" style={{ width: '100%', backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer' }}>Login</button>
+                </form>
+                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                    <p>Don't have an account? <a href="/signup" style={{ color: '#007bff', textDecoration: 'none' }}>Create One</a></p>
                 </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="passwordhash" value={formData.passwordhash} onChange={handleChange} />
-                </div>
-                <button type="submit">Login</button>
-            </form>
+            </div>
         </div>
     );
 };
